@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PHOENIX CORE - AI Модификация</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACAEAAwE/4PjxAAAAAElFTkSuQmCC">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -38,7 +39,6 @@
             padding: 0 20px;
         }
 
-        /* Header */
         .header {
             background: var(--dark);
             padding: 1.2rem 0;
@@ -123,7 +123,6 @@
             width: 100%;
         }
 
-        /* Hero Section */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -200,7 +199,6 @@
             flex-wrap: wrap;
         }
 
-        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -255,7 +253,6 @@
             border-color: var(--primary);
         }
 
-        /* Sections */
         section {
             padding: 100px 0;
             position: relative;
@@ -285,7 +282,6 @@
             border-radius: 3px;
         }
 
-        /* Features */
         .features {
             background: var(--dark);
         }
@@ -347,7 +343,6 @@
             font-size: 1rem;
         }
 
-        /* Commands */
         .commands {
             background: var(--darker);
         }
@@ -398,7 +393,6 @@
             align-self: flex-start;
         }
 
-        /* Installation */
         .installation {
             background: var(--dark);
         }
@@ -494,7 +488,6 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* Feedback Section */
         .feedback {
             background: var(--darker);
         }
@@ -532,7 +525,6 @@
             box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
         }
 
-        /* Footer */
         .footer {
             background: var(--darker);
             padding: 3rem 0;
@@ -589,7 +581,6 @@
             font-size: 0.9rem;
         }
 
-        /* Анимация появления элементов */
         .fade-in {
             opacity: 0;
             transform: translateY(30px);
@@ -601,7 +592,6 @@
             transform: translateY(0);
         }
 
-        /* Адаптивность */
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
@@ -659,7 +649,6 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header class="header" id="header">
         <div class="container">
             <nav class="nav">
@@ -677,7 +666,6 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero">
         <div class="container">
             <div class="hero-content">
@@ -702,7 +690,6 @@
         </div>
     </section>
 
-    <!-- Features -->
     <section class="features" id="features">
         <div class="container">
             <h2 class="section-title">Возможности</h2>
@@ -758,7 +745,6 @@
         </div>
     </section>
 
-    <!-- Commands -->
     <section class="commands" id="commands">
         <div class="container">
             <h2 class="section-title">Основные команды</h2>
@@ -827,7 +813,6 @@
         </div>
     </section>
 
-    <!-- Installation -->
     <section class="installation" id="installation">
         <div class="container">
             <h2 class="section-title">Скачать PHOENIX CORE</h2>
@@ -875,7 +860,6 @@
         </div>
     </section>
 
-    <!-- Feedback Section -->
     <section class="feedback" id="feedback">
         <div class="container">
             <h2 class="section-title">Обратная связь</h2>
@@ -892,7 +876,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-links">
@@ -919,7 +902,6 @@
     </footer>
 
     <script>
-        // Изменение хедера при скролле
         function updateHeaderOnScroll() {
             const header = document.getElementById('header');
             if (window.scrollY > 50) {
@@ -929,7 +911,6 @@
             }
         }
 
-        // Анимация появления элементов при скролле
         function checkFadeInElements() {
             const fadeElements = document.querySelectorAll('.fade-in');
             
@@ -943,18 +924,14 @@
             });
         }
 
-        // Инициализация
         document.addEventListener('DOMContentLoaded', function() {
-            // Обработчики событий
             window.addEventListener('scroll', function() {
                 updateHeaderOnScroll();
                 checkFadeInElements();
             });
             
-            // Проверка элементов при загрузке
             checkFadeInElements();
             
-            // Плавная прокрутка для ссылок
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();

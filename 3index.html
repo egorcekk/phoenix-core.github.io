@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHOENIX CORE - Liquid Glass Edition</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --glass-primary: rgba(99, 102, 241, 0.15);
+            --glass-secondary: rgba(245, 158, 11, 0.15);
+            --glass-accent: rgba(16, 185, 129, 0.15);
+            --glass-dark: rgba(15, 23, 42, 0.7);
+            --glass-darker: rgba(2, 6, 23, 0.8);
+            --glass-light: rgba(248, 250, 252, 0.9);
+            --liquid-gradient: linear-gradient(
+                135deg,
+                rgba(99, 102, 241, 0.3) 0%,
+                rgba(139, 92, 246, 0.2) 25%,
+                rgba(16, 185, 129, 0.25) 50%,
+                rgba(245, 158, 11, 0.3) 75%,
+                rgba(99, 102, 241, 0.3) 100%
+            );
+            --glass-blur: blur(20px);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.18);
+            --liquid-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --transition-liquid: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: 
+                radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 100% 0%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                #0f172a;
+            color: var(--glass-light);
+            line-height: 1.7;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Liquid Background Animation */
+        .liquid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.4;
+        }
+
+        .liquid-blob {
+            position: absolute;
+            background: var(--liquid-gradient);
+            border-radius: 50%;
+            filter: blur(40px);
+            animation: liquidFlow 20s infinite linear;
+        }
+
+        .liquid-blob:nth-child(1) {
+            width: 500px;
+            height: 500px;
+            top: -200px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .liquid-blob:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            top: 60%;
+            right: -100px;
+            animation-delay: -5s;
+        }
+
+        .liquid-blob:nth-child(3) {
+            width: 300px;
+            height: 300px;
+            bottom: -100px;
+            left: 30%;
+            animation-delay: -10s;
+        }
+
+        @keyframes liquidFlow {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+            25% {
+                transform: translate(100px, -50px) rotate(90deg) scale(1.1);
+            }
+            50% {
+                transform: translate(50px, 100px) rotate(180deg) scale(0.9);
+            }
+            75% {
+                transform: translate(-100px, 50px) rotate(270deg) scale(1.05);
+            }
+        }
+
+        /* Glass Morphism Base */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            box-shadow: var(--liquid-shadow);
+        }
+
+        .glass-intense {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--liquid-gradient);
+            border-radius: 6px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, 
+                rgba(99, 102, 241, 0.6) 0%,
+                rgba(245, 158, 11, 0.6) 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Liquid Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(2, 6, 23, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: var(--transition-liquid);
+        }
+
+        .navbar.scrolled {
+            background: rgba(2, 6, 23, 0.9);
+            padding: 0.8rem 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #6366f1, #f59e0b, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--liquid-gradient);
+            border-radius: 15px;
+            opacity: 0.1;
+            transition: var(--transition-liquid);
+        }
+
+        .logo:hover::before {
+            opacity: 0.3;
+            animation: liquidShine 2s infinite;
+        }
+
+        @keyframes liquidShine {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--glass-light);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            transition: var(--transition-liquid);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--liquid-gradient);
+            transition: var(--transition-liquid);
+            opacity: 0;
+        }
+
+        .nav-links a:hover::before {
+            left: 0;
+            opacity: 0.2;
+        }
+
+        .nav-links a:hover {
+            color: #6366f1;
+            transform: translateY(-2px);
+        }
+
+        /* Liquid Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 4rem 3rem;
+            margin: 2rem auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-glass::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent,
+                rgba(99, 102, 241, 0.1),
+                rgba(245, 158, 11, 0.1),
+                rgba(16, 185, 129, 0.1),
+                transparent
+            );
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero-glass-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-logo {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #6366f1, #f59e0b, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: liquidPulse 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(99, 102, 241, 0.3));
+        }
+
+        @keyframes liquidPulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.05) rotate(1deg); }
+            50% { transform: scale(1) rotate(0deg); }
+            75% { transform: scale(1.05) rotate(-1deg); }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #f8fafc, #cbd5e1, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.8rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .hero-description {
+            font-size: 1.3rem;
+            color: #94a3b8;
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Liquid Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1.2rem 2.5rem;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition-liquid);
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.4), 
+                transparent);
+            transition: left 0.7s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-liquid {
+            background: var(--liquid-gradient);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 8px 32px rgba(31, 38, 135, 0.37),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-liquid:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 
+                0 15px 40px rgba(31, 38, 135, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            animation: liquidShimmer 0.5s ease;
+        }
+
+        @keyframes liquidShimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .btn-glass {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--glass-light);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+        }
+
+        .btn-glass:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+
+        /* Liquid Sections */
+        section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 4rem;
+            background: linear-gradient(135deg, #6366f1, #f59e0b, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0 2rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: var(--liquid-gradient);
+            border-radius: 3px;
+            animation: liquidWidth 3s ease-in-out infinite;
+        }
+
+        @keyframes liquidWidth {
+            0%, 100% { width: 50%; }
+            50% { width: 60%; }
+        }
+
+        /* Liquid Features */
+        .features {
+            position: relative;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 25px;
+            padding: 3rem 2.5rem;
+            transition: var(--transition-liquid);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--liquid-gradient);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 
+                0 20px 40px rgba(31, 38, 135, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: var(--liquid-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            transition: var(--transition-liquid);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.2) rotate(5deg);
+            animation: liquidBounce 0.6s ease;
+        }
+
+        @keyframes liquidBounce {
+            0%, 20%, 60%, 100% { transform: scale(1.2) rotate(5deg); }
+            40% { transform: scale(1.3) rotate(10deg); }
+            80% { transform: scale(1.25) rotate(0deg); }
+        }
+
+        /* Liquid Commands */
+        .commands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .command-card {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            border-left: 5px solid;
+            border-image: var(--liquid-gradient) 1;
+            transition: var(--transition-liquid);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .command-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1), 
+                transparent);
+            transition: left 0.6s;
+        }
+
+        .command-card:hover::before {
+            left: 100%;
+        }
+
+        .command-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Liquid Installation */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .step {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            transition: var(--transition-liquid);
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--liquid-gradient);
+            border-radius: 25px;
+            opacity: 0;
+            transition: var(--transition-liquid);
+            z-index: -1;
+        }
+
+        .step:hover::after {
+            opacity: 0.1;
+        }
+
+        .step:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 70px;
+            height: 70px;
+            background: var(--liquid-gradient);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+            transition: var(--transition-liquid);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-number::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(45deg);
+            transition: var(--transition-liquid);
+        }
+
+        .step:hover .step-number {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 12px 35px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Liquid Download Section */
+        .download-section {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px);
+            padding: 4rem 3rem;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--liquid-gradient);
+            opacity: 0.05;
+            z-index: -1;
+            animation: liquidBackground 10s ease infinite;
+        }
+
+        @keyframes liquidBackground {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .version-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.7rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1rem;
+            margin-top: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .year-badge {
+            background: var(--liquid-gradient);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* Liquid Footer */
+        .footer {
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 4rem 0 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--liquid-gradient);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: var(--transition-liquid);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+        }
+
+        .footer-links a:hover {
+            color: var(--glass-light);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: #94a3b8;
+            text-decoration: none;
+            transition: var(--transition-liquid);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-link:hover {
+            background: var(--liquid-gradient);
+            color: white;
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .copyright {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+
+        /* Liquid Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Liquid Scrollbar */
+        .scroll-indicator {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+        .scroll-dot {
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: var(--transition-liquid);
+            position: relative;
+        }
+
+        .scroll-dot::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            background: var(--liquid-gradient);
+            border-radius: 50%;
+            transition: var(--transition-liquid);
+        }
+
+        .scroll-dot.active::before {
+            width: 16px;
+            height: 16px;
+        }
+
+        .scroll-dot:hover::before {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero-logo {
+                font-size: 4rem;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .scroll-indicator {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-logo {
+                font-size: 3rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .hero-glass {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Liquid Background -->
+    <div class="liquid-bg">
+        <div class="liquid-blob"></div>
+        <div class="liquid-blob"></div>
+        <div class="liquid-blob"></div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+        <div class="scroll-dot active" data-section="hero"></div>
+        <div class="scroll-dot" data-section="features"></div>
+        <div class="scroll-dot" data-section="commands"></div>
+        <div class="scroll-dot" data-section="installation"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <i class="fas fa-bolt"></i>
+                PHOENIX CORE
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="#features">Возможности</a></li>
+                <li><a href="#commands">Команды</a></li>
+                <li><a href="#installation">Скачать</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-glass">
+                    <div class="hero-glass-content">
+                        <div class="hero-logo">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h1>PHOENIX CORE</h1>
+                        <p class="hero-subtitle">Liquid Glass Edition</p>
+                        <p class="hero-description">
+                            Погрузитесь в мир жидкого стекла с самой продвинутой модификацией для DeepSeek AI. 
+                            Исключительная плавность и современный дизайн.
+                        </p>
+                        
+                        <div class="hero-buttons">
+                            <a href="#installation" class="btn btn-liquid">
+                                <i class="fas fa-download"></i>
+                                Скачать Liquid Edition
+                            </a>
+                            <a href="#features" class="btn btn-glass">
+                                <i class="fas fa-info-circle"></i>
+                                Исследовать возможности
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Liquid Возможности</h2>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-water"></i>
+                    </div>
+                    <h3>Liquid Дизайн</h3>
+                    <p>Плавные анимации и эффекты жидкого стекла для непревзойденного визуального опыта</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    <h3>Расширенные режимы</h3>
+                    <p>Более 15 уникальных режимов работы с плавными переходами</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3>Кастомизация</h3>
+                    <p>Полная настройка цветов, анимаций и эффектов под ваш стиль</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Commands -->
+    <section class="commands" id="commands">
+        <div class="container">
+            <h2 class="section-title">Liquid Команды</h2>
+            <div class="commands-grid">
+                <div class="command-card fade-in">
+                    <div class="command-name">/liquid</div>
+                    <p class="command-desc">Активировать Liquid режим</p>
+                </div>
+                <div class="command-card fade-in">
+                    <div class="command-name">/glass</div>
+                    <p class="command-desc">Эффекты стеклянного морфизма</p>
+                </div>
+                <div class="command-card fade-in">
+                    <div class="command-name">/animate</div>
+                    <p class="command-desc">Управление анимациями</p>
+                </div>
+                <div class="command-card fade-in">
+                    <div class="command-name">/customize</div>
+                    <p class="command-desc">Настройка внешнего вида</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation -->
+    <section class="installation" id="installation">
+        <div class="container">
+            <h2 class="section-title">Liquid Установка</h2>
+            
+            <div class="steps">
+                <div class="step fade-in">
+                    <div class="step-number">1</div>
+                    <h3>Скачайте Liquid Edition</h3>
+                    <p>Получите последнюю версию с эффектами жидкого стекла</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">2</div>
+                    <h3>Активируйте Liquid режим</h3>
+                    <p>Используйте команду /liquid для активации</p>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-number">3</div>
+                    <h3>Настройте под себя</h3>
+                    <p>Персонализируйте эффекты и анимации</p>
+                </div>
+            </div>
+            
+            <div class="download-section fade-in">
+                <h3>Скачайте PHOENIX CORE Liquid Edition</h3>
+                <p>Погрузитесь в мир плавных анимаций и эффектов жидкого стекла</p>
+                
+                <a href="https://disk.yandex.ru/d/yhTmG7H2vFyeuA" class="btn btn-liquid" style="margin-top: 2rem;">
+                    <i class="fas fa-download"></i>
+                    Скачать Liquid Edition
+                </a>
+                
+                <div class="version-badge">
+                    Версия 3.0.0 <span class="year-badge">2025</span>
+                </div>
+                
+                <p style="margin-top: 1.5rem; color: #94a3b8; font-size: 0.9rem;">
+                    Эксклюзивная Liquid Glass версия с расширенными эффектами
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="#features">Liquid Возможности</a>
+                <a href="#commands">Liquid Команды</a>
+                <a href="#installation">Liquid Скачать</a>
+            </div>
+            
+            <div class="social-links">
+                <a href="#" class="social-link">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="#" class="social-link">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="#" class="social-link">
+                    <i class="fab fa-discord"></i>
+                </a>
+            </div>
+            
+            <p class="copyright">&copy; 2024-2025 PHOENIX CORE Liquid Edition. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Liquid Background Animation
+        function createLiquidBackground() {
+            const liquidBg = document.querySelector('.liquid-bg');
+            for (let i = 0; i < 5; i++) {
+                const blob = document.createElement('div');
+                blob.className = 'liquid-blob';
+                
+                const size = Math.random() * 400 + 200;
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                const duration = Math.random() * 25 + 15;
+                const delay = Math.random() * 10;
+                
+                blob.style.width = `${size}px`;
+                blob.style.height = `${size}px`;
+                blob.style.left = `${left}%`;
+                blob.style.top = `${top}%`;
+                blob.style.animationDuration = `${duration}s`;
+                blob.style.animationDelay = `${delay}s`;
+                
+                liquidBg.appendChild(blob);
+            }
+        }
+
+        // Scroll Animations
+        function handleScrollAnimations() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const scrollDots = document.querySelectorAll('.scroll-dot');
+            const navbar = document.getElementById('navbar');
+            
+            // Navbar background on scroll
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            
+            // Fade in elements
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+            
+            // Update scroll dots
+            const sections = document.querySelectorAll('section');
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= sectionTop - 200) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+            
+            scrollDots.forEach(dot => {
+                dot.classList.remove('active');
+                if (dot.getAttribute('data-section') === currentSection) {
+                    dot.classList.add('active');
+                }
+            });
+        }
+
+        // Scroll to section
+        function setupScrollDots() {
+            const scrollDots = document.querySelectorAll('.scroll-dot');
+            
+            scrollDots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    const targetSection = this.getAttribute('data-section');
+                    const targetElement = document.getElementById(targetSection);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Liquid button effects
+        function setupLiquidButtons() {
+            const buttons = document.querySelectorAll('.btn-liquid');
+            
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.animation = 'liquidShimmer 0.5s ease';
+                });
+                
+                button.addEventListener('animationend', function() {
+                    this.style.animation = '';
+                });
+            });
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            createLiquidBackground();
+            setupScrollDots();
+            setupLiquidButtons();
+            
+            window.addEventListener('scroll', handleScrollAnimations);
+            handleScrollAnimations(); // Initial check
+            
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        window.scrollTo({
+                            top: target.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+
+        // Liquid cursor effect (optional)
+        document.addEventListener('mousemove', function(e) {
+            const cursor = document.querySelector('.liquid-cursor');
+            if (cursor) {
+                cursor.style.left = e.pageX + 'px';
+                cursor.style.top = e.pageY + 'px';
+            }
+        });
+    </script>
+</body>
+</html>
